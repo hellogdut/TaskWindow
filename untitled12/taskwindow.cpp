@@ -45,8 +45,6 @@ void TaskWindow::enterEvent(QEvent *e)
     QDesktopWidget* desktopWidget = QApplication::desktop();
     QRect deskRect = desktopWidget->screenGeometry();
 
-
-
     RECT rc;
 
     /* 1. 类似 alt_tab 效果 */
@@ -57,7 +55,8 @@ void TaskWindow::enterEvent(QEvent *e)
     /* 2. 最大化窗口效果 */
     ShowWindow(m_hwnd,SW_MAXIMIZE);
     GetWindowRect(m_hwnd,&rc);
-    SetWindowPos(m_hwnd,HWND_TOPMOST,rc.left,rc.top,rc.right - rc.left,rc.bottom - rc.top,SWP_NOMOVE);
+    SetWindowPos(m_hwnd,HWND_TOP,rc.left,rc.top,rc.right - rc.left,rc.bottom - rc.top,SWP_NOMOVE);
+    //SetWindowPos(m_hwnd,HWND_BOTTOM,rc.left,rc.top,rc.right - rc.left,rc.bottom - rc.top,SWP_NOMOVE);
 
     QPushButton::enterEvent(e);
     emit clicked();

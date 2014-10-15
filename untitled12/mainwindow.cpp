@@ -214,7 +214,7 @@ void MainWindow::activate()
 
 
     this ->setWindowFlags(Qt::FramelessWindowHint
-                          //Qt::Tool // 不在任务栏显示
+                          |Qt::Tool // 不在任务栏显示
                           |Qt::WindowStaysOnTopHint
                           );
 
