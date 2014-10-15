@@ -1,3 +1,4 @@
+
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "QDesktopWidget"
@@ -16,7 +17,6 @@
 #include <windows.h>
 #include <QCursor>
 #include <MyGlobalShortcut/MyGlobalShortCut.h>
-/*  强行修改 #define _WIN32_WINNT 0x0600 */
 struct MyWindow
 {
     HWND hwnd;
