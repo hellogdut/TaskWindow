@@ -44,7 +44,7 @@ BOOL CALLBACK MainWindow::EnumWindowsProc(HWND hwnd, LONG lParam)
         &&  title != ""
         &&  title != "Program Manager")
     {
-        qDebug() << title << endl;
+        //qDebug() << title << endl;
         // 获取所有窗口句柄
         hwnd_vec.push_back(hwnd);
         return true;
@@ -118,14 +118,12 @@ void MainWindow::activate()
     // 1. 枚举所有窗口句柄,保存至 hwnd_vec
     EnumDesktopWindows(NULL,EnumWindowsProc,(LPARAM)0);
     qDebug() << "---------------------" << endl;
-    qDebug() << "active 删除之前:" << hwnd_vec.size();
     for(std::vector<HWND>::iterator i = hwnd_vec.begin(); i != hwnd_vec.end();++i)
         if(*i == (HWND)this->winId())
         {
             hwnd_vec.erase(i);
             break;
         }
-     qDebug() << "active 删除之后:" << hwnd_vec.size();
     /* 2. 对每个句柄所在窗口截图，保存至 qpixmap_vec */
 //    for(std::vector<HWND>::iterator i = hwnd_vec.begin(); i != hwnd_vec.end();++i)
 //        GrabWindowSnap(*i);
