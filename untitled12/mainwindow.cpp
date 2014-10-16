@@ -2,7 +2,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "QDesktopWidget"
-#include "qdebug.h"
+#include "qDebug.h"
 #include "string"
 #include "QString"
 #include <QKeyEvent>
@@ -44,7 +44,7 @@ BOOL CALLBACK MainWindow::EnumWindowsProc(HWND hwnd, LONG lParam)
         &&  title != ""
         &&  title != "Program Manager")
     {
-        //qDebug() << title << endl;
+        //ug() << title << endl;
         // 获取所有窗口句柄
         hwnd_vec.push_back(hwnd);
         return true;
@@ -84,6 +84,20 @@ bool MainWindow::ExtractIco(QString file_path, QPixmap &pic)
     return 0;
 
 }
+
+void MainWindow::timerEvent(QTimerEvent *)
+{
+    QPoint pos = QCursor::pos();
+
+    if(is_active && !m_taskrect.contains(pos))
+    {
+
+        is_active = false;
+        toclose();
+    }
+}
+
+
 
 void MainWindow::toclose()
 {
@@ -197,8 +211,16 @@ void MainWindow::activate()
     int taskcount = 0;
     for(QVector<MyWindow>::iterator i = win_vec.begin(); i != win_vec.end();++i)
         taskcount++;
+
+
     int j = 0;
     QPoint pos = QCursor::pos();
+    qDebug() << "pos" << endl;
+     // 计算任务栏区域，用于智能隐藏
+    m_taskrect = QRect(pos.x() - 30 - taskcount/2 * 50 - 50,
+                       pos.y() - 60,
+                       taskcount * 50 + 100,
+                       150);
     for(QVector<MyWindow>::iterator i = win_vec.begin(); i != win_vec.end();++i)
     {
 
@@ -232,13 +254,14 @@ void MainWindow::activate()
 
 
 MainWindow::MainWindow(QWidget *parent) :
-    QMainWindow(parent),is_active(false)
+    QMainWindow(parent),is_active(false),m_taskrect(QRect())
 {
 
     Init();         // 初始化背景透明
     //activate();     // 热键触发
     this->hide();
-
+    // 智能隐藏
+    startTimer(500);
     MyGlobalShortCut* shortcut = new MyGlobalShortCut("Alt+1",this);
     connect(shortcut,SIGNAL(activated()),this,SLOT(activate()));
 

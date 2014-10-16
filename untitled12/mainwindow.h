@@ -24,12 +24,15 @@ public:
     static BOOL CALLBACK EnumWindowsProc(HWND hwnd, LONG lParam);
     // 获取程序图标
     bool ExtractIco(QString file_path,QPixmap& pic);
+    //　智能隐藏
+    void timerEvent(QTimerEvent *);
 
 public slots:
     void toclose();
     void activate();
 private:
     QRect m_desk;
+    QRect m_taskrect;
     bool    is_active;
 
 };
