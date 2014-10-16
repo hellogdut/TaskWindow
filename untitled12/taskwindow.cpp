@@ -57,7 +57,8 @@ void TaskWindow::enterEvent(QEvent *e)
    // ShowWindow(m_hwnd,SW_SHOW);
    // GetWindowRect(m_hwnd,&rc);
    // SetWindowPos(m_hwnd,NULL,rc.left,rc.top,rc.right - rc.left,rc.bottom - rc.top,SWP_NOMOVE);
-    SwitchToThisWindow(m_hwnd,true);
+    //BringWindowToTop(m_hwnd);
+    SwitchToThisWindow(m_hwnd,false);
     QPushButton::enterEvent(e);
     emit clicked();
 
