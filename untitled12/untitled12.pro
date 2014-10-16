@@ -29,8 +29,5 @@ LIBS += -luser32 -lshell32 -lgdi32
 LIBS +=  Psapi.Lib
 
 OTHER_FILES +=
-
-RESOURCES += \
-    img.qrc
 RC_FILE += app.rc
 
