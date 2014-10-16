@@ -60,7 +60,8 @@ bool MainWindow::ExtractIco(QString file_path, QPixmap &pic)
 
     const UINT iconCount = ExtractIconEx((wchar_t *)sourceFile.utf16(), -1, 0, 0, 0);
     if (!iconCount) {
-        //std::cerr << sourceFile.toStdString() << " does not appear to contain icons.\n";
+        //qDebug() << sourceFile.toStdString() << " does not appear to contain icons" << endl;;
+        qDebug() << sourceFile<< " does not appear to contain icons" << endl;
         return 1;
     }
 
@@ -70,13 +71,13 @@ bool MainWindow::ExtractIco(QString file_path, QPixmap &pic)
         ExtractIconEx((wchar_t *)sourceFile.utf16(), 0, 0, icons.data(), iconCount);
 
     if (!extractedIconCount) {
-        //qErrnoWarning("Failed to extract icons from %s", qPrintable(sourceFile));
+        qDebug() << "Failed to extract icons from" << sourceFile << endl;
         return 1;
     }
     QPixmap pixmap = QtWin::fromHICON(icons[0]);
     if (pixmap.isNull())
     {
-           // std::cerr << "Error converting icons.\n";
+            qDebug()<< "Error converting icons.\n";
             return 1;
     }
     // 保存
@@ -173,17 +174,22 @@ void MainWindow::activate()
     for (QVector<MyWindow>::iterator i = win_vec.begin(); i != win_vec.end();++i)
         {
             DWORD dwProcessId;
+
             GetWindowThreadProcessId(i->hwnd, &dwProcessId);
-            HANDLE h_Process = OpenProcess(PROCESS_QUERY_INFORMATION, FALSE, dwProcessId);
-            WCHAR path[MAX_PATH] = {0};
+
+            HANDLE h_Process = OpenProcess(PROCESS_QUERY_INFORMATION|PROCESS_QUERY_LIMITED_INFORMATION, FALSE, dwProcessId);
+            char path[MAX_PATH] = {0};
             DWORD size = MAX_PATH;
+
             /* define _WIN32_WINNT as 0x0600 or later. */
-            if(QueryFullProcessImageName(h_Process, 0, path, &size))
+
+            if(QueryFullProcessImageNameA(h_Process, 0, path, &size))
             {
-                std::wstring bob(&path[0]);
-                std::string title(bob.begin(), bob.end());
-                //std::string title(path);
-                //qDebug() << title.c_str() << endl;
+//                std::wstring bob(&path[0]);
+//                std::string title(bob.begin(), bob.end());
+
+                std::string title(path);
+                qDebug() << title.c_str() << endl;
                 QString file_path(title.c_str());
                 QPixmap pix;
                 //qDebug() << "标题: " << i->title << endl << "路径: " << title.c_str() << endl;
@@ -194,28 +200,36 @@ void MainWindow::activate()
                 }
                 else
                 {
-                    //qDebug() << "图标： no" <<  endl;
+                   qDebug() << i->title << " 找不到图标,清除" << endl;
+                   qDebug() << "i = win_vec.erase(i);" << endl;
+                   i = win_vec.erase(i);
+                   if(i == win_vec.end())
+                       break;
 
-                   i->icon = QPixmap();
                 }
             }
             else
             {
 
-               // qDebug() << "标题 : " << i->title << " 路径： " << "no" << endl << "error:" << GetLastError() << endl;
+
+                i = win_vec.erase(i);
+                if(i == win_vec.end())
+                    break;
+                qDebug() << "标题 : " << i->title << " 路径： " << "no" << endl << "error:" << GetLastError() << endl;
             }
 
 
 
         }
     int taskcount = 0;
+    qDebug() << "现在剩下多少任务:" << endl;
     for(QVector<MyWindow>::iterator i = win_vec.begin(); i != win_vec.end();++i)
+    {
         taskcount++;
-
-
+        qDebug() << i->title <<endl;
+    }
     int j = 0;
     QPoint pos = QCursor::pos();
-    qDebug() << "pos" << endl;
      // 计算任务栏区域，用于智能隐藏
     m_taskrect = QRect(pos.x() - 30 - taskcount/2 * 50 - 50,
                        pos.y() - 60,
