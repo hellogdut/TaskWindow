@@ -227,7 +227,7 @@ void MainWindow::activate()
 
         TaskWindow* task = new TaskWindow(this,i->hwnd,i->icon,i->title,QSize(64,64));
        // task->setGeometry(m_desk.width() * 0.4 + (j - taskcount/2) * 50 ,m_desk.height() * 0.3 ,64,64);
-        task->setGeometry(pos.x() - 30 + (j - taskcount/2) * 50 ,pos.y() - 60 ,64,64);
+        task->setGeometry(pos.x() + (j - taskcount/2) * 50 ,pos.y() - 60 ,64,64);
         j++;
         connect(task,SIGNAL(clicked()),this,SLOT(toclose()));
         task_vec.push_back(task);
