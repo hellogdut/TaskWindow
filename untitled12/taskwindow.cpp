@@ -53,11 +53,11 @@ void TaskWindow::enterEvent(QEvent *e)
 //    SetWindowPos(m_hwnd,HWND_TOPMOST,rc.left,rc.top,rc.right - rc.left,rc.bottom - rc.top,SWP_NOMOVE);
 
     /* 2. 最大化窗口效果 */
-    ShowWindow(m_hwnd,SW_MAXIMIZE);
-    GetWindowRect(m_hwnd,&rc);
-    //SetWindowPos(m_hwnd,HWND_TOPMOST,rc.left,rc.top,rc.right - rc.left,rc.bottom - rc.top,SWP_NOMOVE);
-    //SetWindowPos(m_hwnd,HWND_BOTTOM,rc.left,rc.top,rc.right - rc.left,rc.bottom - rc.top,SWP_NOMOVE);
-
+   // BringWindowToTop(m_hwnd);
+   // ShowWindow(m_hwnd,SW_SHOW);
+   // GetWindowRect(m_hwnd,&rc);
+   // SetWindowPos(m_hwnd,NULL,rc.left,rc.top,rc.right - rc.left,rc.bottom - rc.top,SWP_NOMOVE);
+    SwitchToThisWindow(m_hwnd,true);
     QPushButton::enterEvent(e);
     emit clicked();
 
